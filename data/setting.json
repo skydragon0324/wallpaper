@@ -1,0 +1,14 @@
+[
+    {
+        "title" : "Blue",
+        "preview" : "data/theme/blue_theme.png",
+        "font" : "data/font/font.ttf",
+        "style": 1
+    },
+    {
+        "title" : "Computer",
+        "preview" : "data/theme/computer.png",
+        "font" : "data/font/font.ttf",
+        "style": 2
+    }
+]
