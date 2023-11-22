@@ -3,7 +3,7 @@ import os
 from helper import getDataFilePath
 import tkinter as tk
 from PIL import Image, ImageTk
-from window import MainWindow
+from window import MainWindow, main as main_window
 import shutil
 import window
 
@@ -42,7 +42,7 @@ class InstallApp(QMainWindow):
                     print("There is no file in startup folder")
                     shutil.copy(exe_file, destination_path)
                     shutil.copy(uninstall_file, destination_uninstall_path)
-                    MainWindow(QMainWindow)
+                    main_window()
                 except Exception as e:
                     # print(f"error : {e}")
                     pass

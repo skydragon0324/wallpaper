@@ -8,7 +8,7 @@ a = Analysis(
     ['wallpaper.py'],
     pathex=[r'data/files'],
     binaries=[('data/files/window.exe', 'data/files/'), ('data/files/uninstall.exe', 'data/files/')],
-    datas=[('data/icon/*', 'data/icon/'), ('data/theme/*', 'data/theme/'), ('data/image/*', 'data/image/'), ('data/*', 'data/')],
+    datas=[('data/icon/*', 'data/icon/'), ('data/theme/*', 'data/theme/'), ('data/image/*', 'data/image/'), ('data/*', 'data/'), ('display.py', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
