@@ -2,6 +2,8 @@ from PIL import Image, ImageDraw
 import time
 import os
 import sys
+import tkinter as tk
+
 def calcColor(pct):
     pct_diff = 1.0 - pct
     green_color = int(min(255, pct_diff*2 * 255))
@@ -50,3 +52,21 @@ def getDataFilePath(file_name):
         file_path = os.path.abspath(os.path.join(bundle_dir,file_name))
         # print(f'file_path ------------------------------------ {file_path}')
         return file_path
+
+
+# Set window at the centen
+def center_window(window, width, height):
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    x = (screen_width - width) // 2
+    y = (screen_height - height) // 2
+    window.geometry(f"{width}x{height}+{x}+{y}")
+
+
+# If you have already installed this program, you will receive this message
+def alert(window, title, font_style, font_color, text, icon):
+    window.title(title)
+    window.iconbitmap(icon)
+    text = tk.Label(window, text=text, font=font_style, fg=font_color).pack(padx=10, pady=30)
+    btn = tk.Button(window, text="Close", width=5, font=(12), command=window.quit).pack(padx=10, pady=10)
+

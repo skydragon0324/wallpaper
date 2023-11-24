@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow
 import os
-from helper import getDataFilePath
+import sys
+from helper import getDataFilePath, alert
 import tkinter as tk
+from helper import center_window
 
 
 class Uninstall(QMainWindow):
@@ -9,31 +11,31 @@ class Uninstall(QMainWindow):
         uninstall = tk.Tk()
         uninstall.title("Uninstall program")
         uninstall.iconbitmap(getDataFilePath("data/icon/delete.ico"))
-        uninstall.geometry("400x200")
+        center_window(uninstall, 400, 200)
         text = tk.Label(uninstall, text="Do you want to uninstall\n this program really ?",font=("Helvetica", 18), fg="blue")
         text.pack(fill=tk.X, padx=10, pady=30)
-        def close_app():
-            uninstall.destroy()
 
         def uninstall_success() :
             uninstall_success_screen = tk.Toplevel()
-            uninstall_success_screen.title("Uninstalled successfully")
-            uninstall_success_screen.iconbitmap(getDataFilePath("data/icon/delete.ico"))
-            uninstall_text = tk.Label(uninstall_success_screen, text="You have just uninstalled program", font=("Helvetica", 12), fg="green").pack()
-            close_btn = tk.Button(uninstall_success_screen, text="close", width=5, command=close_app).pack()
-
+            center_window(uninstall_success_screen, 300, 150)
+            alert(uninstall_success_screen, "Uninstalled successfully", ("Helvetica", 12), "green", "You have just uninstalled program", getDataFilePath("data/icon/delete.ico"))
+     
         def uninstall_error() :
             uninstall_error_screen = tk.Toplevel()
-            uninstall_error_screen.geometry("300x100")
-            uninstall_error_screen.title("Uninstalled failed")
-            uninstall_error_screen.iconbitmap(getDataFilePath("data/icon/delete.ico"))
-            uninstall_text = tk.Label(uninstall_error_screen, text="This program has been already uninstalled", font=("Helvetica", 12), fg="#FFB6C1").pack()
-            close_btn = tk.Button(uninstall_error_screen, text="close", width=5, command=close_app)
-            close_btn.place(x=110, y=30)
-
+            center_window(uninstall_error_screen, 320, 150)
+            alert(uninstall_error_screen, "Uninstalled failed", ("Helvetica", 12), "red", "This program has been already uninstalled", getDataFilePath("data/icon/delete.ico"))
 
         def uninstall_app():
             exe_file = "window.exe"
+
+            # delete uninstall file
+            uninstall_file = "uninstall.exe"
+            current_directory = os.getcwd()
+            uninstall_path = os.path.join(current_directory, uninstall_file)
+            if(os.path.exists(uninstall_path)) :
+                os.remove(uninstall_path)
+            else :
+                pass
 
             # Destination path (Startup folder for the current user)
             startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
@@ -50,7 +52,7 @@ class Uninstall(QMainWindow):
         # add button
         uninstall_btn = tk.Button(uninstall, text="Uninstall", font=("Helvetica", 12), fg="#FFB6C1", bg="gray", width=7, command=uninstall_app)
         uninstall_btn.place(x=280, y=130)
-        close_btn = tk.Button(uninstall, text="Cancel",font=("Helvetica", 12), fg="blue", bg="gray", width=7, command=close_app)
+        close_btn = tk.Button(uninstall, text="Cancel",font=("Helvetica", 12), fg="blue", bg="gray", width=7, command=uninstall.quit)
         close_btn.place(x=50, y=130)
 
         uninstall.mainloop()

@@ -13,7 +13,6 @@ class   WallpaperSys:
             self.handle = pynvml.nvmlDeviceGetHandleByIndex(0)
         except:
             self.num_gpus = 0
-        print("******")
         self.stop_flag = stop_flag
         self.prev_cpu = -90
         self.prev_ram = -90
@@ -28,9 +27,9 @@ class   WallpaperSys:
             # self.background = Image.alpha_composite(tmp_image, transparent_layer)
         self.background = tmp_image
 
+
         # self.font_20 = ImageFont.truetype('data/font/sd.ttf', size=20)
         # self.font_40 = ImageFont.truetype('data/font/sd.ttf', size=40)
-        
         self.font_20 = ImageFont.truetype(font_path, size=20)
         self.font_40 = ImageFont.truetype(font_path, size=45)
         self.cf_font_60 = ImageFont.truetype(getDataFilePath('data/font/cf.ttf'), size=60)
@@ -52,6 +51,7 @@ class   WallpaperSys:
         hz_actual = cpu_info['hz_actual'][0]
         count = cpu_info['count']
         cpu_total = round( hz_actual* count/1024/1024/1024,1)
+
         cpu_frequency = psutil.cpu_freq().current
         cpu_frequency_percent = round(cpu_frequency/psutil.cpu_freq().max * 100)
         ram_usage = psutil.virtual_memory().percent
@@ -76,7 +76,6 @@ class   WallpaperSys:
 
         # Create a new ImageDraw object
         self.draw = ImageDraw.Draw(background)
-        
         #cpu
         
         cpu_base_x = 200
@@ -168,7 +167,6 @@ class   WallpaperSys:
         # self.draw.line((250, 540, 860, 540), width=1, fill="#60b8ff")
         # self.draw.line((1060, 540, 1670, 540), width=1, fill="#60b8ff")
         # self.draw.line((250, 100, 1670, 100), width=1, fill="#60b8ff")
-        
 
     def is_64bit_windows(self):
         """Check if 64 bit Windows OS"""
@@ -192,6 +190,7 @@ class   WallpaperSys:
         ctypes.windll.user32.SystemParametersInfoW(SPI_GETDESKWALLPAPER, buffer_size, path, 0)
         wallpaper_path = path.value
         return wallpaper_path
+    
     def set_background(background):
         ctypes.windll.user32.SystemParametersInfoW(20, 0, background, 3)
     def run(self):
@@ -203,10 +202,10 @@ class   WallpaperSys:
             net_time = time.time() - start
             # time.sleep(0.1)
             # print(f"net_time: {net_time}")
-            if(net_time > 1):
-                time.sleep(0.1)
-            else:
-                time.sleep(0.1)
+            # if(net_time > 1):
+            #     time.sleep(0.1)
+            # else:
+            #     time.sleep(0.1)
 
 def main():
     stop_flag = threading.Event()

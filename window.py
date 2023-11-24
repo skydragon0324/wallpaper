@@ -15,7 +15,6 @@ class MainWindow(QMainWindow):
         self.position = 0
         self.isblack = 0
         file_path = getDataFilePath('data/setting.json')
-        print("___________-=-=-=-=_________")
         # teste_file_path = getDataFilePath('data/image/computer.jpg')
         self.wallpaper = WallpaperSys.get_current_background_path(self)
         with open(file_path, "r") as file:
@@ -23,10 +22,8 @@ class MainWindow(QMainWindow):
 
         self.font = getDataFilePath(self.theme_list[0]['font'])
         self.style = self.theme_list[0]['style']
-        print("9090909090")
         self.stop_flag = threading.Event()
         self.real_time_thread = threading.Thread(target=WallpaperSys( self.font, stop_flag=self.stop_flag, style= self.style).run)
-        print("((((((((((((((()))))))))))))))")
         super().__init__()
         self.init_ui()
         # self.real_time_thread.start()
@@ -34,7 +31,6 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         # Set up the window
         self.setWindowTitle('Wallpaper')
-        print("________++++++++_________")
         self.setWindowIcon(QIcon(getDataFilePath('data/icon/icon.png')))
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
         self.setFixedSize(500, 250)
@@ -58,7 +54,6 @@ class MainWindow(QMainWindow):
         self.preview.setScaledContents(True)
 
         # how to show window size end
-        print("()()()()()()()()()()()((((((()))))))")
         self.ok_button = QPushButton('Okay', self)
         self.ok_button.setGeometry(230, 225, 70, 25)
         self.ok_button.clicked.connect(self.on_ok_button_click)
@@ -136,7 +131,6 @@ class MainWindow(QMainWindow):
 
         
 def main():
-    print("_______________")
     app = QApplication([])
     multiprocessing.freeze_support()
     try:
@@ -146,11 +140,8 @@ def main():
             win32gui.ShowWindow(frgrnd_wndw, win32con.SW_HIDE)
     except  :
         pass
-    print("____11111111______")
     window = MainWindow()
-    print("_____222222_____")
     window.show()
-    print("------------33333333----------")
     close_action = window.tray_menu.actions()[1]
     close_action.triggered.connect(window.close_app)
 
