@@ -6,8 +6,8 @@ block_cipher = None
 
 a = Analysis(
     ['wallpaper.py'],
-    pathex=[r'data/files'],
-    binaries=[('data/files/window.exe', 'data/files/'), ('data/files/uninstall.exe', 'data/files/')],
+    pathex=[r'files'],
+    binaries=[('files/window.exe', 'files/'), ('files/uninstall.exe', 'files/')],
     datas=[('data/icon/*', 'data/icon/'), ('data/theme/*', 'data/theme/'), ('data/image/*', 'data/image/'), ('data/*', 'data/'), ('display.py', '.')],
     hiddenimports=[],
     hookspath=[],

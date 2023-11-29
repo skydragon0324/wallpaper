@@ -4,6 +4,7 @@ import sys
 from helper import getDataFilePath, alert
 import tkinter as tk
 from helper import center_window
+import psutil
 
 
 class Uninstall(QMainWindow):
@@ -12,7 +13,7 @@ class Uninstall(QMainWindow):
         uninstall.title("Uninstall program")
         uninstall.iconbitmap(getDataFilePath("data/icon/delete.ico"))
         center_window(uninstall, 400, 200)
-        text = tk.Label(uninstall, text="Do you want to uninstall\n this program really ?",font=("Helvetica", 18), fg="blue")
+        text = tk.Label(uninstall, text="Do you really want to \n uninstall this program ?",font=("Helvetica", 18), fg="blue")
         text.pack(fill=tk.X, padx=10, pady=30)
 
         def uninstall_success() :
@@ -23,7 +24,7 @@ class Uninstall(QMainWindow):
         def uninstall_error() :
             uninstall_error_screen = tk.Toplevel()
             center_window(uninstall_error_screen, 320, 150)
-            alert(uninstall_error_screen, "Uninstalled failed", ("Helvetica", 12), "red", "This program has been already uninstalled", getDataFilePath("data/icon/delete.ico"))
+            alert(uninstall_error_screen, "Uninstalled failed", ("Helvetica", 12), "red", "This program has already been uninstalled", getDataFilePath("data/icon/delete.ico"))
 
         def uninstall_app():
             exe_file = "window.exe"
@@ -32,22 +33,34 @@ class Uninstall(QMainWindow):
             uninstall_file = "uninstall.exe"
             current_directory = os.getcwd()
             uninstall_path = os.path.join(current_directory, uninstall_file)
-            if(os.path.exists(uninstall_path)) :
-                os.remove(uninstall_path)
-            else :
-                pass
 
             # Destination path (Startup folder for the current user)
             startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
 
             # Copy the executable to the Startup folder
             destination_path = os.path.join(startup_folder, exe_file)
+
+            # If window.exe is running now, stop it first.
+            for process in psutil.process_iter(['pid','name']):
+                if process.info['name'] == "window.exe" :
+                    try :
+                        pid = process.info['pid']
+                        p = psutil.Process(pid)
+                        p.terminate()
+                    except:
+                        pass
+
             if(os.path.exists(destination_path)) :
                 os.remove(destination_path)
                 uninstall_success()
             else : 
-                print("Your program has been already uninstalled")
+                print("Your program has already been uninstalled")
                 uninstall_error()
+            if(os.path.exists(uninstall_path)) :
+                os.unlink(uninstall_path)
+                os.remove(uninstall_path)
+            else :
+                pass
         
         # add button
         uninstall_btn = tk.Button(uninstall, text="Uninstall", font=("Helvetica", 12), fg="#FFB6C1", bg="gray", width=7, command=uninstall_app)

@@ -5,7 +5,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import shutil
 import subprocess
-
+import psutil
 
 class InstallApp(QMainWindow):
     def __init__(self):
@@ -23,16 +23,19 @@ class InstallApp(QMainWindow):
             install.destroy()
 
             #  copy window.exe to start up folder
-            exe_file = getDataFilePath("data/files/window.exe")
+            exe_file = getDataFilePath("files/window.exe")
+            print(f"exe_file:::{exe_file}")
 
             # Destination path (Startup folder for the current user)
             startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
-            uninstall_file = getDataFilePath("data/files/uninstall.exe")
+            uninstall_file = getDataFilePath("files/uninstall.exe")
             desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+            print(f"desktop_path ::: {desktop_path}")
             destination_uninstall_path = os.path.join(desktop_path, os.path.basename("uninstall.exe"))
 
             # Copy the executable to the Startup folder
             destination_path = os.path.join(startup_folder, "window.exe")
+            print(f"destination_path::: {destination_path}")
             if(os.path.exists(destination_path)) :
                 print("already exist")
                 alert_screen = tk.Tk()
@@ -47,11 +50,48 @@ class InstallApp(QMainWindow):
                 try:
                     print("There is no file in startup folder")
                     shutil.copy(exe_file, destination_path)
+                    print("-------------------")
                     shutil.copy(uninstall_file, destination_uninstall_path)
                     subprocess.run([exe_file])
                 except Exception as e:
+                    print(f"skydragon ::: {e}")
                     pass
+        def uninstall_App () :
+            exe_file = "window.exe"
 
+            # delete uninstall file
+            uninstall_file = "uninstall.exe"
+            current_directory = os.getcwd()
+            uninstall_path = os.path.join(current_directory, uninstall_file)
+
+            # Destination path (Startup folder for the current user)
+            startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
+
+            # Copy the executable to the Startup folder
+            destination_path = os.path.join(startup_folder, exe_file)
+
+            # If window.exe is running now, stop it first.
+            for process in psutil.process_iter(['pid','name']):
+                if process.info['name'] == "window.exe" :
+                    try :
+                        pid = process.info['pid']
+                        p = psutil.Process(pid)
+                        p.terminate()
+                    except:
+                        pass
+
+            if(os.path.exists(destination_path)) :
+                os.remove(destination_path)
+                uninstall_success()
+            else : 
+                print("Your program has already been uninstalled")
+                uninstall_error()
+            if(os.path.exists(uninstall_path)) :
+                os.unlink(uninstall_path)
+                os.remove(uninstall_path)
+            else :
+                pass
+        
         # Add a label to the window
         text_tk = "Hello, Everyone! Welcome to wallpaper"
         text_label = tk.Label(install, text=text_tk, font=("Helvetica", 18), fg="blue")
@@ -71,6 +111,8 @@ class InstallApp(QMainWindow):
         # add button
         install_btn = tk.Button(install, text="Install", width=5, command=Install_App)
         install_btn.place(x=450, y=330)
+        uninstall_btn = tk.Button(install, text="Uninstall", width=5, command=Uninstall_App)
+        uninstall_btn.place(x=300, y=330)
         close_btn = tk.Button(install, text="Cancel", width=5, command=install.quit)
         close_btn.place(x=120, y=330)
 
