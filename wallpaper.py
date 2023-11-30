@@ -17,7 +17,17 @@ class InstallApp(QMainWindow):
 
         # Set the window size
         center_window(install, 600, 400)
-            
+        
+        def uninstall_success() :
+            uninstall_success_screen = tk.Toplevel()
+            center_window(uninstall_success_screen, 300, 150)
+            alert(uninstall_success_screen, "Uninstalled successfully", ("Helvetica", 12), "green", "You have just uninstalled program", getDataFilePath("data/icon/delete.ico"))
+     
+        def uninstall_error() :
+            uninstall_error_screen = tk.Toplevel()
+            center_window(uninstall_error_screen, 320, 150)
+            alert(uninstall_error_screen, "Uninstalled failed", ("Helvetica", 12), "red", "This program has already been uninstalled", getDataFilePath("data/icon/delete.ico"))
+
         # Start install app
         def Install_App() :
             install.destroy()
@@ -28,10 +38,6 @@ class InstallApp(QMainWindow):
 
             # Destination path (Startup folder for the current user)
             startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup')
-            uninstall_file = getDataFilePath("files/uninstall.exe")
-            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-            print(f"desktop_path ::: {desktop_path}")
-            destination_uninstall_path = os.path.join(desktop_path, os.path.basename("uninstall.exe"))
 
             # Copy the executable to the Startup folder
             destination_path = os.path.join(startup_folder, "window.exe")
@@ -51,12 +57,11 @@ class InstallApp(QMainWindow):
                     print("There is no file in startup folder")
                     shutil.copy(exe_file, destination_path)
                     print("-------------------")
-                    shutil.copy(uninstall_file, destination_uninstall_path)
                     subprocess.run([exe_file])
                 except Exception as e:
                     print(f"skydragon ::: {e}")
                     pass
-        def uninstall_App () :
+        def Uninstall_App() :
             exe_file = "window.exe"
 
             # delete uninstall file
@@ -111,8 +116,8 @@ class InstallApp(QMainWindow):
         # add button
         install_btn = tk.Button(install, text="Install", width=5, command=Install_App)
         install_btn.place(x=450, y=330)
-        uninstall_btn = tk.Button(install, text="Uninstall", width=5, command=Uninstall_App)
-        uninstall_btn.place(x=300, y=330)
+        uninstall_btn = tk.Button(install, text="Uninstall", width=6, command=Uninstall_App)
+        uninstall_btn.place(x=285, y=330)
         close_btn = tk.Button(install, text="Cancel", width=5, command=install.quit)
         close_btn.place(x=120, y=330)
 
