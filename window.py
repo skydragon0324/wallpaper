@@ -12,26 +12,27 @@ import shutil
 class MainWindow(QMainWindow):
     
     def __init__(self):
-        self.position = 0
-        self.isblack = 0
-        file_path = getDataFilePath('data/setting.json')
-        # teste_file_path = getDataFilePath('data/image/computer.jpg')
-        self.wallpaper = WallpaperSys.get_current_background_path(self)
-        with open(file_path, "r") as file:
-            self.theme_list = json.load(file)
+        if __name__ == '__main__':
+            self.position = 0
+            self.isblack = 0
+            file_path = getDataFilePath('data/setting.json')
+            # teste_file_path = getDataFilePath('data/image/computer.jpg')
+            self.wallpaper = WallpaperSys.get_current_background_path(self)
+            with open(file_path, "r") as file:
+                self.theme_list = json.load(file)
 
-        self.font = getDataFilePath(self.theme_list[0]['font'])
-        self.style = self.theme_list[0]['style']
-        self.stop_flag = threading.Event()
-        self.real_time_thread = threading.Thread(target=WallpaperSys( self.font, stop_flag=self.stop_flag, style= self.style).run)
-        super().__init__()
-        self.init_ui()
-        # self.real_time_thread.start()
+            self.font = getDataFilePath(self.theme_list[0]['font'])
+            self.style = self.theme_list[0]['style']
+            self.stop_flag = threading.Event()
+            self.real_time_thread = threading.Thread(target=WallpaperSys( self.font, stop_flag=self.stop_flag, style= self.style).run)
+            super().__init__()
+            self.init_ui()
+            # self.real_time_thread.start()
 
     def init_ui(self):
         # Set up the window
         self.setWindowTitle('Wallpaper')
-        self.setWindowIcon(QIcon(getDataFilePath('data/icon/icon.png')))
+        self.setWindowIcon(QIcon(getDataFilePath('data/icon/wallpaper.ico')))
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
         self.setFixedSize(500, 250)
         # self.setStyleSheet('background-color: #333;')
@@ -69,8 +70,8 @@ class MainWindow(QMainWindow):
 
         # Set up the system tray icon
         self.tray_icon = QSystemTrayIcon(self)
-        self.setWindowIcon(QIcon(getDataFilePath('data/icon/icon.png')))
-        self.tray_icon.setIcon(QIcon(getDataFilePath('data/icon/icon.png')))
+        self.setWindowIcon(QIcon(getDataFilePath('data/icon/wallpaper.ico')))
+        self.tray_icon.setIcon(QIcon(getDataFilePath('data/icon/wallpaper.ico')))
         self.tray_icon.setVisible(True)
 
         # Add a context menu to the tray icon
@@ -117,9 +118,8 @@ class MainWindow(QMainWindow):
         self.real_time_thread = threading.Thread(target=WallpaperSys( self.font, stop_flag=self.stop_flag, style=self.style).run)
         self.real_time_thread.start()
         self.hide()
-    def on_apply_button_click(self, ):
+    def on_apply_button_click(self):
         if self.real_time_thread.is_alive():
-            print('-')
             self.stop_flag.set()  # Reset the stop flag
             self.real_time_thread.join()
         self.stop_flag.clear()
@@ -130,22 +130,7 @@ class MainWindow(QMainWindow):
         self.hide()
 
         
-def main():
-    app = QApplication([])
-    multiprocessing.freeze_support()
-    try:
-        frgrnd_wndw = win32gui.GetForegroundWindow()
-        wndw_title  = win32gui.GetWindowText(frgrnd_wndw)
-        if wndw_title.endswith("window.exe"):
-            win32gui.ShowWindow(frgrnd_wndw, win32con.SW_HIDE)
-    except  :
-        pass
-    window = MainWindow()
-    window.show()
-    close_action = window.tray_menu.actions()[1]
-    close_action.triggered.connect(window.close_app)
 
-    app.exec_()
 
 if __name__ == '__main__':
     app = QApplication([])
@@ -153,10 +138,11 @@ if __name__ == '__main__':
     try:
         frgrnd_wndw = win32gui.GetForegroundWindow()
         wndw_title  = win32gui.GetWindowText(frgrnd_wndw)
-        if wndw_title.endswith("window.exe"):
+        if wndw_title.endswith("wallpaper.exe"):
             win32gui.ShowWindow(frgrnd_wndw, win32con.SW_HIDE)
     except  :
         pass
+    
     window = MainWindow()
     window.show()
 

@@ -71,7 +71,6 @@ class   WallpaperSys:
                 gpu_frequency = pynvml.nvmlDeviceGetClockInfo(self.handle, pynvml.NVML_CLOCK_GRAPHICS)
                 gpu_frequency_percent = round(gpu_frequency/pynvml.nvmlDeviceGetMaxClockInfo(self.handle, pynvml.NVML_CLOCK_GRAPHICS) * 100)
             except Exception as e:
-                # print(f"An error occurred: {e}")
                 pass
 
         # Create a new ImageDraw object
