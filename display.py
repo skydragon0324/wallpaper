@@ -193,18 +193,21 @@ class   WallpaperSys:
     def set_background(background):
         ctypes.windll.user32.SystemParametersInfoW(20, 0, background, 3)
     def run(self):
-        while not self.stop_flag.is_set():
-            start = time.time()
-            tmp_background = self.background.copy()
-            self.draw_info(tmp_background)
-            self.set_wallpaper(tmp_background)
-            net_time = time.time() - start
-            # time.sleep(0.1)
-            # print(f"net_time: {net_time}")
-            # if(net_time > 1):
-            #     time.sleep(0.1)
-            # else:
-            #     time.sleep(0.1)
+        try :
+            while not self.stop_flag.is_set():
+                start = time.time()
+                tmp_background = self.background.copy()
+                self.draw_info(tmp_background)
+                self.set_wallpaper(tmp_background)
+                net_time = time.time() - start
+                # time.sleep(0.1)
+                # print(f"net_time: {net_time}")
+                # if(net_time > 1):
+                #     time.sleep(0.1)
+                # else:
+                #     time.sleep(0.1)
+        except Exception as e : 
+            pass
 
 def main():
     stop_flag = threading.Event()
